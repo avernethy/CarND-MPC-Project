@@ -33,6 +33,11 @@ class FG_eval {
     // `fg` a vector of the cost constraints, `vars` is a vector of variable values (state & actuators)
     // NOTE: You'll probably go back and forth between this function and
     // the Solver function below.
+
+    // Differentiation: CppAD::pow(x, 2);
+    // Declarations: CppAD<double
+
+    
   }
 };
 
@@ -52,20 +57,65 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // element vector and there are 10 timesteps. The number of variables is:
   //
   // 4 * 10 + 2 * 9
-  size_t n_vars = 0;
+  // state = 6 elements
+  // actuators = 2 element vector
+  // time steps = 25
+  // -> 6 * 25 + 2 * 24 = 198
+  size_t n_vars = 198;
   // TODO: Set the number of constraints
-  size_t n_constraints = 0;
+  size_t n_constraints = 7; //use the example code for now
+
+  //state is the same as the x0 vector in the tutorial
+
+  /*  0. Set N and dt. See above
+        1. Fit the polynomial to the waypoints.
+        2. Calculate initial cross track error and orientation error values.
+        3. Define the components of the cost function (state, actuators, etc). You may use the methods previously discussed or make up something, up to you!
+        4. Define the model constraints. These are the state update equations defined in the Vehicle Models module.*/
 
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
+
+  double x = state[0];
+  double y = state[1];
+  double psi = state[2];
+  double v = x0[3];
+  double cte = state[4];
+  double epsi = state[5];
+
   Dvector vars(n_vars);
   for (int i = 0; i < n_vars; i++) {
     vars[i] = 0;
   }
+  
+  int num_var = 25;
+  int x_start = num_var;
+  int y_start = x_start + num_var;
+  int psi_start = y_start + num_var;
+  int v_start = psi_start + num_var;
+  int cte_start = v_start + num_var;
+  int epsi_start = cte_start + num_var;
+  int delta_start = epsi_start + num_var;
+  int a_start = delta_start + num_var - 1;
+
+  vars[x_start] = x;
+  vars[y_start] = y;
+  vars[psi_start] = psi;
+  vars[v_start] = v;
+  vars[cte_start] = cte;
+  vars[epsi_start] = epsi;
 
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
   // TODO: Set lower and upper limits for variables.
+  for (int i = delta_start; i < a_start; i++){
+    vars_lowerbound[i] = -0.436332;
+    vars_upperbound[i] =  0.436332;
+  }
+  for (int i = a_start; i < n_vars; i++){
+    vars_lowerbound[i] = -1.0;
+    vars_upperbound[i] =  1.0;
+  }
 
   // Lower and upper limits for the constraints
   // Should be 0 besides initial state.
@@ -117,5 +167,11 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
+
+  /*Set N and dt.
+  1. Fit the polynomial to the waypoints.
+  2. Calculate initial cross track error and orientation error values.
+  3. Define the components of the cost function (state, actuators, etc). You may use the methods previously discussed or make up something, up to you!
+  4. Define the model constraints. These are the state update equations defined in the Vehicle Models module.*/
   return {};
 }
