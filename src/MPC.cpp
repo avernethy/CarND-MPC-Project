@@ -21,7 +21,7 @@ double dt = 0.05;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 //From quiz
-double ref_v = 40; 
+double ref_v = 10; 
 
 //From quiz
 size_t x_start = 0;
@@ -55,7 +55,7 @@ class FG_eval {
     //TODO: Define the cost related to the reference state and 
     //anything that you may think would be beneficial
     //From solution
-    // The part of the cost based on teh reference state.
+    // The part of the cost based on the reference state.
     for (int t =0; t < N; t++) {
       fg[0] += CppAD::pow(vars[cte_start + t], 2);
       fg[0] += CppAD::pow(vars[epsi_start + t], 2);
