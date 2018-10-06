@@ -87,6 +87,9 @@ int main() {
           // j[1] is the data JSON object
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
+          Eigen::VectorXd ptsxE = j[1]["ptsx"];
+          Eigen::VectorXd ptsyE = j[1]["ptsy"];
+
           double px = j[1]["x"];
           double py = j[1]["y"];
           double psi = j[1]["psi"];
@@ -98,7 +101,7 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsx, ptsy, 1);
+          auto coeffs = polyfit(ptsxE, ptsyE, 1);
           double cte = polyeval(coeffs, px) - py;
           double epsi = psi - atan(coeffs[1]);
 
@@ -109,7 +112,7 @@ int main() {
 
           double steer_value;
           double throttle_value;
-          vector<double> ouputs = mpc.Solve(state, coeffs);
+          vector<double> outputs = mpc.Solve(state, coeffs);
           steer_value = outputs[6]/deg2rad(25);
           throttle_value = outputs[7];
 
