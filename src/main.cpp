@@ -87,8 +87,8 @@ int main() {
           // j[1] is the data JSON object
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
-          Eigen::VectorXd ptsxE = j[1]["ptsx"];
-          Eigen::VectorXd ptsyE = j[1]["ptsy"];
+          Eigen::VectorXd ptsxE = ptsx;
+          Eigen::VectorXd ptsyE = ptsy;
 
           double px = j[1]["x"];
           double py = j[1]["y"];
