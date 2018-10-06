@@ -87,13 +87,13 @@ int main() {
           // j[1] is the data JSON object
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
-          Eigen::VectorXd ptsxE(6);
+          Eigen::VectorXd ptsxE(2);
           //std::cout<<ptsx<<std::endl;
-          ptsxE << ptsx[0], ptsx[1], ptsx[2], ptsx[3], ptsx[4], ptsx[5];
-          //ptsxE << ptsx[0], ptsx[1];
-          Eigen::VectorXd ptsyE(6);
-          ptsyE <<  ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
-          //ptsyE <<  ptsy[0], ptsy[1];
+          //ptsxE << ptsx[0], ptsx[1], ptsx[2], ptsx[3], ptsx[4], ptsx[5];
+          ptsxE << ptsx[0], ptsx[1];
+          Eigen::VectorXd ptsyE(2);
+          //ptsyE <<  ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
+          ptsyE <<  ptsy[0], ptsy[1];
 
           double px = j[1]["x"];
           double py = j[1]["y"];
@@ -116,13 +116,13 @@ int main() {
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
-          steer_value = outputs[6]/deg2rad(25);
+          steer_value = -outputs[6]/deg2rad(25);
           throttle_value = outputs[7];
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
           // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
-          msgJson["steering_angle"] = -steer_value;
+          msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = throttle_value;
 
           //Display the MPC predicted trajectory 
