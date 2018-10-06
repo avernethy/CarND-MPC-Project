@@ -91,7 +91,7 @@ int main() {
           //std::cout<<ptsx<<std::endl;
           ptsxE << ptsx[0], ptsx[1];
           Eigen::VectorXd ptsyE(2);
-          //ptsxE <<  ptsy;
+          ptsyE <<  ptsy[0], ptsy[1];
 
           double px = j[1]["x"];
           double py = j[1]["y"];
@@ -104,20 +104,20 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          //auto coeffs = polyfit(ptsxE, ptsyE, 1);
-          //double cte = polyeval(coeffs, px) - py;
-          //double epsi = psi - atan(coeffs[1]);
+          auto coeffs = polyfit(ptsxE, ptsyE, 1);
+          double cte = polyeval(coeffs, px) - py;
+          double epsi = psi - atan(coeffs[1]);
 
-          //Eigen::VectorXd state(6);
-          //state << px, py, psi, v, cte, epsi;
+          Eigen::VectorXd state(6);
+          state << px, py, psi, v, cte, epsi;
 
 
 
           double steer_value;
           double throttle_value;
-          //vector<double> outputs = mpc.Solve(state, coeffs);
-          //steer_value = outputs[6]/deg2rad(25);
-          //throttle_value = outputs[7];
+          vector<double> outputs = mpc.Solve(state, coeffs);
+          steer_value = outputs[6]/deg2rad(25);
+          throttle_value = outputs[7];
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
