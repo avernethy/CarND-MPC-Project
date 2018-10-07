@@ -131,7 +131,7 @@ int main() {
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
           steer_value = 0;//-outputs[6]/deg2rad(25);  //minus is to the left
-          std::cout <<"Throttle: " <<outputs[7] << std::endl;
+          std::cout <<"Throttle: " <<outputs[6] << std::endl;
           throttle_value = outputs[6];
 
           json msgJson;
