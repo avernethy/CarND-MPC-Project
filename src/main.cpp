@@ -96,7 +96,7 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
 
-          for(int i = 0; i < ptsx.size() ; ++i){
+          for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
             ptsx_local[i] = ((ptsx[i] - px) * cos(psi) - (ptsy[i]-py) * sin(psi));
             ptsy_local[i] = ((ptsy[i] - py) * cos(psi) - (ptsx[i] - px) * sin(psi));
