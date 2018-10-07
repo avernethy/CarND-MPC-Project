@@ -97,8 +97,8 @@ int main() {
           double psi = j[1]["psi"];
 
           for(int i = 0; i < 6 ; ++i){
-            ptsx_local[i] = (ptsx[i] * cos(psi) - ptsy[i] * sin(psi) + (px-ptsx[i]));
-            ptsy_local[i] = (ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + (px-ptsy[i]));
+            ptsx_local[i] = (ptsx[i] * cos(psi) - ptsy[i] * sin(psi) + px);
+            ptsy_local[i] = (ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + py);
           }
                     
           Eigen::VectorXd ptsxE(2);
