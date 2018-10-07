@@ -119,8 +119,8 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 1);
-          double cte = polyeval(coeffs, 0);
+          auto coeffs = polyfit(ptsxE, ptsyE, 2);
+          double cte = polyeval(coeffs, x) - y;
           std::cout <<"CTE: " <<cte << std::endl;
           double epsi = 0;//psi - atan(coeffs[1]);
 
