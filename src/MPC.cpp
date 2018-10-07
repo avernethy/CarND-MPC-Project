@@ -56,20 +56,20 @@ class FG_eval {
     //anything that you may think would be beneficial
     //From solution
     // The part of the cost based on the reference state.
-    for (int t =0; t < N; t++) {
+    for (unsigned int t =0; t < N; t++) {
       fg[0] += CppAD::pow(vars[cte_start + t], 2);
       fg[0] += CppAD::pow(vars[epsi_start + t], 2);
       fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
     }
 
     //Minimize the use of actuators.
-    for (int t = 0; t < N - 1; t++){
+    for (unsigned int t = 0; t < N - 1; t++){
       fg[0] += CppAD::pow(vars[delta_start + t], 2);
       fg[0] += CppAD::pow(vars[a_start + t] - ref_v, 2);
     }
 
     //Minimize the value gap between sequential actuations.
-    for (int t = 0; t < N - 2; t++){
+    for (unsigned int t = 0; t < N - 2; t++){
       fg[0] += CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
       fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
@@ -84,10 +84,8 @@ class FG_eval {
     fg[1 + cte_start] = vars[cte_start];
     fg[1 + epsi_start] = vars[epsi_start];
 
-
-
     // The rest of the constraints
-    for (int t = 1; t < N; t++) {
+    for (unsigned int t = 1; t < N; t++) {
       AD<double> x1 = vars[x_start + t];
       AD<double> y1 = vars[y_start + t];
       AD<double> psi1 = vars[psi_start + t];
