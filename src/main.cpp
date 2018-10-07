@@ -122,7 +122,7 @@ int main() {
           auto coeffs = polyfit(ptsxE, ptsyE, 1);
           double cte = polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
-          double epsi = psi - atan(coeffs[1]);
+          double epsi = 0;//psi - atan(coeffs[1]);
 
           Eigen::VectorXd state(6);
           state << px, py, psi, v, cte, epsi;
@@ -130,7 +130,7 @@ int main() {
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
-          steer_value = -outputs[6]/deg2rad(25);  //minus is to the left
+          steer_value = outputs[6]/deg2rad(25);  //minus is to the left
           throttle_value = 0.1;//outputs[7];
 
           json msgJson;
