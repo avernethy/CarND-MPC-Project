@@ -90,7 +90,7 @@ int main() {
           Eigen::VectorXd ptsxE(6);
           
           vector<double> ptsx_local(6);
-          vector<double> ptxy_local(6);
+          vector<double> ptsy_local(6);
           
           double px = j[1]["x"];
           double py = j[1]["y"];
