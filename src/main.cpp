@@ -88,15 +88,27 @@ int main() {
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
           Eigen::VectorXd ptsxE(6);
-          ptsxE << ptsx[0], ptsx[1], ptsx[2], ptsx[3], ptsx[4], ptsx[5];
-          //ptsxE << ptsx[0], ptsx[1];
-          Eigen::VectorXd ptsyE(6);
-          ptsyE <<  ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
-          //ptsyE <<  ptsy[0], ptsy[1];
-
+          
+          vector<double> ptsx_local;
+          vector<double> ptxy_local;
+          
           double px = j[1]["x"];
           double py = j[1]["y"];
           double psi = j[1]["psi"];
+
+          for(int i = 0; i < 6 ; ++i){
+            ptsx_local.push_back(ptsx[i] * cos(psi) - ptsy[i] * sin(psi) + (px-ptsx[i]));
+            ptsy_local.push_back(ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + (px-ptsy[i]));
+          }
+                    
+          ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
+          //ptsxE << ptsx[0], ptsx[1];
+          Eigen::VectorXd ptsyE(6);
+          ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
+          //ptsyE <<  ptsy[0], ptsy[1];
+
+          
+          
           double v = j[1]["speed"];
 
           /*
@@ -115,7 +127,7 @@ int main() {
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
-          steer_value = outputs[6]/deg2rad(25);
+          steer_value = -outputs[6]/deg2rad(25);
           throttle_value = outputs[7];
 
           json msgJson;
