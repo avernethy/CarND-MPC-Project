@@ -96,7 +96,7 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
 
-          for(int i = 0; i < 6 ; ++i){
+          for(int i = 0; i < ptsx.size() ; ++i){
             ptsx_local[i] = (ptsx[i] * cos(psi) - ptsy[i] * sin(psi) + px);
             ptsy_local[i] = (ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + py);
           }
@@ -141,6 +141,8 @@ int main() {
           vector<double> mpc_x_vals;
           vector<double> mpc_y_vals;
 
+          
+
           //mpc_x_vals = solution.x[x_start+1+i];
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
@@ -155,6 +157,8 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
+          next_x_vals = ptsx_local;
+          next_y_vals = ptsy_local;
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
