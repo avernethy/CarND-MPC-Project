@@ -101,11 +101,11 @@ int main() {
             ptsy_local[i] = (ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + (px-ptsy[i]));
           }
                     
-          ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
-          //ptsxE << ptsx[0], ptsx[1];
+          //ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
+          ptsxE << ptsx_local[0], ptsx_local[1];
           Eigen::VectorXd ptsyE(6);
-          ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
-          //ptsyE <<  ptsy[0], ptsy[1];
+          //ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
+          ptsyE <<  ptsy_local[0], ptsy_local[1];
 
           
           
@@ -117,7 +117,7 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 2);
+          auto coeffs = polyfit(ptsxE, ptsyE, 1);
           double cte = polyeval(coeffs, px) - py;
           double epsi = psi - atan(coeffs[1]);
 
