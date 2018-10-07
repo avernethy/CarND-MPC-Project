@@ -102,10 +102,10 @@ int main() {
             ptsy_local[i] = ((ptsy[i] - py) * cos(psi) - (ptsx[i] - px) * sin(psi));
           }
                     
-          Eigen::VectorXd ptsxE(2);
+          Eigen::VectorXd ptsxE(6);
           //ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
           ptsxE << ptsx_local[0], ptsx_local[1];
-          Eigen::VectorXd ptsyE(2);
+          Eigen::VectorXd ptsyE(6);
           //ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
           ptsyE <<  ptsy_local[0], ptsy_local[1];
 
@@ -119,7 +119,7 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 1);
+          auto coeffs = polyfit(ptsxE, ptsyE, 2);
           double cte = polyeval(coeffs, px) - py;
           double epsi = psi - atan(coeffs[1]);
 
@@ -135,8 +135,8 @@ int main() {
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
           // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
-          msgJson["steering_angle"] = 0.0;//steer_value;
-          msgJson["throttle"] = 0.1;//throttle_value;
+          msgJson["steering_angle"] = steer_value;
+          msgJson["throttle"] = throttle_value;
 
           //Display the MPC predicted trajectory 
           vector<double> mpc_x_vals;
