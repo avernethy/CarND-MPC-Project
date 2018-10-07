@@ -124,7 +124,7 @@ int main() {
           auto coeffs = polyfit(ptsxE, ptsyE, 2);
           double cte = polyeval(coeffs, px) - py;
           std::cout <<"CTE: " <<cte << std::endl;
-          double epsi = 0;//psi - atan(coeffs[1]);
+          double epsi = psi - atan(coeffs[1]);
 
           Eigen::VectorXd state(6);
           state << px, py, psi, v, cte, epsi;
