@@ -89,16 +89,16 @@ int main() {
           vector<double> ptsy = j[1]["ptsy"];
           Eigen::VectorXd ptsxE(6);
           
-          vector<double> ptsx_local;
-          vector<double> ptxy_local;
+          vector<double> ptsx_local(6);
+          vector<double> ptxy_local(6);
           
           double px = j[1]["x"];
           double py = j[1]["y"];
           double psi = j[1]["psi"];
 
           for(int i = 0; i < 6 ; ++i){
-            ptsx_local.push_back(ptsx[i] * cos(psi) - ptsy[i] * sin(psi) + (px-ptsx[i]));
-            ptsy_local.push_back(ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + (px-ptsy[i]));
+            ptsx_local[i] = (ptsx[i] * cos(psi) - ptsy[i] * sin(psi) + (px-ptsx[i]));
+            ptsy_local[i] = (ptsx[i] * sin(psi) + ptsy[i] * cos(psi) + (px-ptsy[i]));
           }
                     
           ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
