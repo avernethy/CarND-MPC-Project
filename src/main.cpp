@@ -122,12 +122,12 @@ int main() {
           *
           */
           auto coeffs = polyfit(ptsxE, ptsyE, 2);
-          double cte = polyeval(coeffs, px) - py;
+          double cte = polyeval(coeffs, 0.0) - py;
           std::cout <<"CTE: " <<cte << std::endl;
           double epsi = psi - atan(coeffs[1]);
 
           Eigen::VectorXd state(6);
-          state << px, py, psi, v, cte, epsi;
+          state << 0.0, 0.0, psi, v, cte, epsi;
 
           double steer_value;
           double throttle_value;
