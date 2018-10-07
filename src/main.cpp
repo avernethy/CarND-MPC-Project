@@ -130,7 +130,7 @@ int main() {
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
-          steer_value = -0.1;//-outputs[6]/deg2rad(25);  //minus is to the left
+          steer_value = -outputs[6]/deg2rad(25);  //minus is to the left
           throttle_value = 0.1;//outputs[7];
 
           json msgJson;
