@@ -129,8 +129,8 @@ int main() {
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
-          steer_value = -outputs[6]/deg2rad(25);
-          throttle_value = outputs[7];
+          steer_value = 0.1;//-outputs[6]/deg2rad(25);
+          throttle_value = 0.1;//outputs[7];
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
