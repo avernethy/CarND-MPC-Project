@@ -121,11 +121,12 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 3);
+          auto coeffs = polyfit(ptsxE, ptsyE, 1);
           double cte = polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
-          double epsi = atan(3*coeffs[0] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[1] * ptsx_local[0] + coeffs[2]);
-          std::cout <<"epsi: " <<epsi << std::endl;
+          //double epsi = atan(3*coeffs[0] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[1] * ptsx_local[0] + coeffs[2]);
+          double epsi = atan(coeffs[1]);
+          std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
           state << px, py, psi, v, cte, epsi;
