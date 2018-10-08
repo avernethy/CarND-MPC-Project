@@ -123,8 +123,8 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 1);
-          auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 1);
+          auto coeffs = polyfit(ptsxE, ptsyE, 3);
+          auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
           double cte = polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
           //double epsi = atan(3*coeffs[0] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[1] * ptsx_local[0] + coeffs[2]);
@@ -136,7 +136,7 @@ int main() {
 
           double steer_value;
           double throttle_value;
-          vector<double> outputs = mpc.Solve(state, coeffs);
+          vector<double> outputs = mpc.Solve(state, coeffs_g);
           steer_value = outputs[14]/deg2rad(25);  //minus is to the left
           std::cout <<"Throttle: " <<outputs[15] << std::endl;
           throttle_value = 0.1;//outputs[15];
