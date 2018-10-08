@@ -123,8 +123,8 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 2);
-          auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 2);
+          auto coeffs = polyfit(ptsxE, ptsyE, 1);
+          auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 1);
           double cte = polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
           //double epsi = atan(3*coeffs[0] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[1] * ptsx_local[0] + coeffs[2]);
