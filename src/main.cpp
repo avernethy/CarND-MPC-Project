@@ -149,10 +149,8 @@ int main() {
           vector<double> mpc_y_vals;
 
           
-          for (int i = 0; i < 5; ++i){
-            mpc_x_vals[i] = (double) i;
-            mpc_x_vals[i] = 0;
-          }
+          mpc_x_vals = {0.0, 1.0, 2.0, 3.0, 4.0};
+          mpc_y_vals = {0.0, 0.0, 0.0, 0.0, 0.0};
 
           //mpc_x_vals = solution.x[x_start+1+i];
 
