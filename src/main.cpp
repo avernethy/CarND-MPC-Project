@@ -125,9 +125,9 @@ int main() {
           */
           auto coeffs = polyfit(ptsxE, ptsyE, 3);
           auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
-          double cte = -polyeval(coeffs, 0);
+          double cte = polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
-          double epsi = -atan(3*coeffs[3] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[2] * ptsx_local[0] + coeffs[1]);
+          double epsi = atan(3*coeffs[3] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[2] * ptsx_local[0] + coeffs[1]);
           //double epsi = -atan(coeffs[1]);
           std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
