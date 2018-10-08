@@ -132,12 +132,12 @@ int main() {
           std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
-          state << px, py, psi, v, cte, epsi;
+          state << 0, 0, 0, v, cte, epsi;
 
           double steer_value;
           double throttle_value;
-          vector<double> outputs = mpc.Solve(state, coeffs_g);
-          steer_value = outputs[14]/deg2rad(25);  //minus is to the left
+          vector<double> outputs = mpc.Solve(state, coeffs);
+          steer_value = -outputs[14]/deg2rad(25);  //minus is to the left
           std::cout <<"Throttle: " <<outputs[15] << std::endl;
           throttle_value = 0.1;//outputs[15];
 
