@@ -125,10 +125,10 @@ int main() {
           */
           auto coeffs = polyfit(ptsxE, ptsyE, 1);
           auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 1);
-          double cte = -polyeval(coeffs, 0);
+          double cte = polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
           //double epsi = atan(3*coeffs[0] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[1] * ptsx_local[0] + coeffs[2]);
-          double epsi = -atan(coeffs[1]);
+          double epsi = 0;//-atan(coeffs[1]);
           std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
@@ -139,7 +139,7 @@ int main() {
           vector<double> outputs = mpc.Solve(state, coeffs_g);
           steer_value = outputs[14]/deg2rad(25);  //minus is to the left
           std::cout <<"Throttle: " <<outputs[15] << std::endl;
-          throttle_value = outputs[15];
+          throttle_value = 0.1;//outputs[15];
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
@@ -148,15 +148,23 @@ int main() {
           msgJson["throttle"] = throttle_value;
 
           //Display the MPC predicted trajectory 
-          vector<double> mpc_x_vals;
-          vector<double> mpc_y_vals;
+          vector<double> mpc_x_vals_g;
+          vector<double> mpc_y_vals_g;
 
           for (int i = 0; i < 5; ++i){
-            mpc_x_vals.push_back(outputs[i]);
+            mpc_x_vals_g.push_back(outputs[i]);
             std::cout <<"mpc x val: " <<outputs[i] << std::endl;
-            mpc_y_vals.push_back(outputs[i+5]);
+            mpc_y_vals_g.push_back(outputs[i+5]);
           }
           
+          vector<double> mpc_x_vals(5);
+          vector<double> mpc_y_vals(5);
+
+          for(unsigned int i = 0; i < mpc_y_vals_g.size() ; ++i){
+            //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
+            mpc_x_vals[i] = (mpc_x_vals_g[i] - px) * cos(psi) + (mpc_y_vals_g[i] - py) * sin(psi);
+            mpc_y_vals[i] = (mpc_y_vals_g[i] - py) * cos(psi) - (mpc_x_vals_g[i] - px) * sin(psi);
+          }
 
           //mpc_x_vals = solution.x[x_start+1+i];
 
