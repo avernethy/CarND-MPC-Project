@@ -149,8 +149,8 @@ int main() {
           vector<double> mpc_y_vals;
 
           for (int i = 0; i < 5; ++i){
-            mpc_x_vals[i] = 1.0;
-            mpc_y_vals[i] = 1.0;
+            mpc_x_vals.push_back(outputs[i]);
+            mpc_y_vals.push_back(outputs[i+5]);
           }
           
 
