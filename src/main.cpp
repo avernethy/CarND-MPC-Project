@@ -106,11 +106,11 @@ int main() {
           Eigen::VectorXd ptsxE_g(6);
           ptsxE_g << ptsx[0], ptsx[1], ptsx[2], ptsx[3], ptsx[4], ptsx[5];
           
-          Eigen::VectorXd ptsxE(6);
-          ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
-          
           Eigen::VectorXd ptsyE_g(6);
           ptsyE_g << ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
+          
+          Eigen::VectorXd ptsxE(6);
+          ptsxE << ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
           
           Eigen::VectorXd ptsyE(6);
           ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
@@ -123,9 +123,9 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          auto coeffs = polyfit(ptsxE, ptsyE, 1);
-          auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 1);
-          double cte = polyeval(coeffs, 0);
+          auto coeffs = polyfit(ptsxE, ptsyE, 3);
+          auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
+          double cte = 0;//polyeval(coeffs, 0);
           std::cout <<"CTE: " <<cte << std::endl;
           //double epsi = atan(3*coeffs[0] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[1] * ptsx_local[0] + coeffs[2]);
           double epsi = 0;//-atan(coeffs[1]);
