@@ -270,15 +270,15 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // from quiz
   std::cout << "a_start:  " << solution.x[a_start+1] << std::endl;
   return {solution.x[x_start + 1], //0
-          solution.x[x_start + 2],//1
-          solution.x[x_start + 3],
-          solution.x[x_start + 4],
-          solution.x[x_start + 5],
+          solution.x[x_start + 6],//1
+          solution.x[x_start + 11],
+          solution.x[x_start + 16],
+          solution.x[x_start + 21],
           solution.x[y_start + 1],
-          solution.x[y_start + 2],
-          solution.x[y_start + 3],
-          solution.x[y_start + 4],
-          solution.x[y_start + 5],
+          solution.x[y_start + 6],
+          solution.x[y_start + 11],
+          solution.x[y_start + 16],
+          solution.x[y_start + 21],
           solution.x[psi_start + 1],
           solution.x[v_start + 1],
           solution.x[cte_start + 1],
