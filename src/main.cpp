@@ -161,7 +161,7 @@ int main() {
           //Display the waypoints/reference line
           vector<double> next_x_vals;
           vector<double> next_y_vals;
-          for (int i = 0; i < 5, ++i){
+          for (int i = 0; i < 5; ++i){
             next_x_vals[i] = i;
             next_y_vals[i] = 0;
           }
