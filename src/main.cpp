@@ -160,7 +160,9 @@ int main() {
 
           //Display the waypoints/reference line
           vector<double> next_x_vals;
+          next_x_vals.push_back(outputs[0]);
           vector<double> next_y_vals;
+          next_y_vals.push_back(outputs[1]);
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
