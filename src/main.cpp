@@ -137,7 +137,7 @@ int main() {
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs_g);
-          steer_value = outputs[14]/deg2rad(25);  //minus is to the left
+          steer_value = -outputs[14]/deg2rad(25);  //minus is to the left
           std::cout <<"Throttle: " <<outputs[15] << std::endl;
           throttle_value = 0.1;//outputs[15];
 
