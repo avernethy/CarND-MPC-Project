@@ -150,7 +150,7 @@ int main() {
 
           
           for (int i = 0; i < 5; ++i){
-            mpc_x_vals[i] = i;
+            mpc_x_vals[i] = double i;
             mpc_x_vals[i] = 0;
           }
 
