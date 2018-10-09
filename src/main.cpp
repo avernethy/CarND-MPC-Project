@@ -126,10 +126,10 @@ int main() {
           auto coeffs = polyfit(ptsxE, ptsyE, 3);
           auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
           double cte = -polyeval(coeffs, 0);
-          std::cout <<"CTE: " <<cte << std::endl;
+          //std::cout <<"CTE: " <<cte << std::endl;
           double epsi = -atan(3*coeffs[3] * ptsx_local[0] * ptsx_local[0] + 2 * coeffs[2] * ptsx_local[0] + coeffs[1]);
           //double epsi = -atan(coeffs[1]);
-          std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
+          //std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
           state << 0, 0, 0, v, cte, epsi;
@@ -138,8 +138,8 @@ int main() {
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
           steer_value = -outputs[14]/deg2rad(25);  //minus is to the left
-          std::cout <<"Throttle: " <<outputs[15] << std::endl;
-          std::cout <<"Steer: " <<steer_value << std::endl;
+          //std::cout <<"Throttle: " <<outputs[15] << std::endl;
+          //std::cout <<"Steer: " <<steer_value << std::endl;
           throttle_value = outputs[15];
 
           json msgJson;
@@ -154,7 +154,7 @@ int main() {
 
           for (int i = 0; i < 5; ++i){
             mpc_x_vals.push_back(outputs[i]);
-            std::cout <<"mpc x val: " <<outputs[i] << std::endl;
+            //std::cout <<"mpc x val: " <<outputs[i] << std::endl;
             mpc_y_vals.push_back(outputs[i+5]);
           }
           
@@ -177,7 +177,7 @@ int main() {
           msgJson["next_y"] = next_y_vals;
 
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          std::cout << msg << std::endl;
+          //std::cout << msg << std::endl;
           // Latency
           // The purpose is to mimic real driving conditions where
           // the car does actuate the commands instantly.
