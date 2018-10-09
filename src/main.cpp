@@ -132,7 +132,7 @@ int main() {
           //std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
-          state << 0, 0, 0, v, cte, epsi;
+          state << 1, 0, 0, v, cte, epsi;
 
           double steer_value;
           double throttle_value;
