@@ -157,29 +157,16 @@ int main() {
             mpc_y_vals_g.push_back(outputs[i+5]);
           }
           
-          vector<double> mpc_x_vals(5);
-          vector<double> mpc_y_vals(5);
-
-          for(unsigned int i = 0; i < mpc_y_vals_g.size() ; ++i){
-            //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
-            mpc_x_vals[i] = (mpc_x_vals_g[i] - px) * cos(psi) + (mpc_y_vals_g[i] - py) * sin(psi);
-            mpc_y_vals[i] = (mpc_y_vals_g[i] - py) * cos(psi) - (mpc_x_vals_g[i] - px) * sin(psi);
-          }
-
-          //mpc_x_vals = solution.x[x_start+1+i];
-
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
 
-          msgJson["mpc_x"] = mpc_x_vals_g;
+          msgJson["mpc_x"] = mpc_x_vals;
           msgJson["mpc_y"] = mpc_y_vals_g;
 
           //Display the waypoints/reference line
           vector<double> next_x_vals;
           vector<double> next_y_vals;
           
-          
-
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
           next_x_vals = ptsx_local;
@@ -187,7 +174,6 @@ int main() {
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
-
 
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
