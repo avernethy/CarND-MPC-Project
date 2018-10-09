@@ -92,8 +92,8 @@ int main() {
           vector<double> ptsx_local(6);
           vector<double> ptsy_local(6);
           
-          double px = j[1]["x"];
-          double py = j[1]["y"];
+          double px  = j[1]["x"];
+          double py  = j[1]["y"];
           double psi = j[1]["psi"];
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
