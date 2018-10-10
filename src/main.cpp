@@ -134,7 +134,7 @@ int main() {
           //from https://discussions.udacity.com/t/how-to-incorporate-latency-into-the-model/257391/4
           px = v * latency;
           py = 0;
-          psi = 0;//-v * delta * latency / Lf;
+          psi = -v * delta * latency / Lf;
           double epsi = -atan(coeffs[1]) + psi;
           double cte = polyeval(coeffs, 0) + v * sin(epsi) * latency;
           v += a * latency;
