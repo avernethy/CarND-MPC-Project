@@ -104,15 +104,21 @@ int main() {
           double v = j[1]["speed"];
           //try adding latency to global coordinates
           double latency = 0.1; //100ms
-          px = px + v * cos(psi) * latency;
-          py = py + v * sin(psi) * latency;
-          psi = psi * v * delta / Lf * latency;
-          v = v + a * latency;
+          px_lat = px + v * cos(psi) * latency;
+          py_lat = py + v * sin(psi) * latency;
+          psi_lat = psi * v * delta / Lf * latency;
+          v_lat = v + a * latency;
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
             ptsx_local[i] = (ptsx[i] - px) * cos(psi) + (ptsy[i] - py) * sin(psi);
             ptsy_local[i] = (ptsy[i] - py) * cos(psi) - (ptsx[i] - px) * sin(psi);
+          }
+
+          for(unsigned int i = 0; i < ptsx.size() ; ++i){
+            //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
+            ptsx_local_lat[i] = (ptsx[i] - px_lat) * cos(psi) + (ptsy[i] - py_lat) * sin(psi);
+            ptsy_local_lat[i] = (ptsy[i] - py_lat) * cos(psi) - (ptsx[i] - px_lat) * sin(psi);
           }
                     
           
@@ -123,13 +129,13 @@ int main() {
           ptsyE_g << ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
           
           Eigen::VectorXd ptsxE(6);
-          ptsxE <<  ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
-          
+          //ptsxE <<  ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
+          ptsxE << ptsx_local_lat[0], ptsx_local_lat[1], ptsx_local_lat[2], ptsx_local_lat[3], ptsx_local_lat[4], ptsx_local_lat[5];
+
           Eigen::VectorXd ptsyE(6);
-          ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
-
+          //ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
+          ptsyE << ptsy_local_lat[0], ptsy_local_lat[1], ptsy_local_lat[2], ptsy_local_lat[3], ptsy_local_lat[4], ptsy_local_lat[5];
           
-
           /*
           * TODO: Calculate steering angle and throttle using MPC.
           *
