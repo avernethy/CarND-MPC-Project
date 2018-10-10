@@ -148,7 +148,7 @@ int main() {
           Eigen::VectorXd state(6);
           //state << 1, 0, 0, v, cte, epsi;
           //based on discussion forum
-          state << px, py, psi, cte, epsi; //car coordinates but predicted 100ms ahead
+          state << px, py, psi, v, cte, epsi; //car coordinates but predicted 100ms ahead
 
 
           double steer_value;
