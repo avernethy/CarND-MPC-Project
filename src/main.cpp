@@ -79,6 +79,7 @@ int main() {
     // The 2 signifies a websocket event
     string sdata = string(data).substr(0, length);
     cout << sdata << endl;
+    
     if (sdata.size() > 2 && sdata[0] == '4' && sdata[1] == '2') {
       string s = hasData(sdata);
       if (s != "") {
@@ -97,7 +98,7 @@ int main() {
           double py  = j[1]["y"];
           double psi = j[1]["psi"];
           double delta  = j[1]["steering_angle"];
-          delta = -delta / deg2rad(25);
+          delta = delta / deg2rad(25);
           double a = j[1]["throttle"];
           const double Lf = 2.67;
 
