@@ -97,7 +97,7 @@ int main() {
           double py  = j[1]["y"];
           double psi = j[1]["psi"];
           double delta  = j[1]["steering_angle"];
-          delta = delta / deg2rad(25);
+          delta = -delta / deg2rad(25);
           double a = j[1]["throttle"];
           const double Lf = 2.67;
 
@@ -133,7 +133,7 @@ int main() {
           //from https://discussions.udacity.com/t/how-to-incorporate-latency-into-the-model/257391/4
           px = v * latency;
           py = 0;
-          psi = -v * delta * latency/Lf;
+          psi = -v * delta * latency / Lf;
           double epsi = -atan(coeffs[1]) + psi;
           double cte = polyeval(coeffs, 0) + v * sin(epsi) * latency;
           v += a * latency;
