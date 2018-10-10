@@ -96,7 +96,8 @@ int main() {
           double px  = j[1]["x"];
           double py  = j[1]["y"];
           double psi = j[1]["psi"];
-          double delta  = j[1]["steering_angle"] / deg2rad(25);
+          double delta  = j[1]["steering_angle"];
+          delta = delta / deg2rad(25)
           double a = j[1]["throttle"];
           const double Lf = 2.67;
 
