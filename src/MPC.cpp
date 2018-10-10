@@ -21,7 +21,7 @@ double dt = 0.02;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 //From quiz
-double ref_v = 60.0; 
+double ref_v = 20.0; 
 
 //From quiz
 size_t x_start = 0;
