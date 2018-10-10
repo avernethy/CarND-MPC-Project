@@ -101,6 +101,13 @@ int main() {
           delta = delta / deg2rad(25);
           double a = j[1]["throttle"];
           const double Lf = 2.67;
+          double v = j[1]["speed"];
+          //try adding latency to global coordinates
+          double latency = 0.1; //100ms
+          px = px + v * cos(psi) * latency;
+          py = py + v * sin(psi) * latency;
+          psi = psi * v * delta / Lf * latency;
+          v = v + a * latency;
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
@@ -115,13 +122,13 @@ int main() {
           Eigen::VectorXd ptsyE_g(6);
           ptsyE_g << ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
           
-          Eigen::VectorXd ptsxE(5);
-          ptsxE <<  ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
+          Eigen::VectorXd ptsxE(6);
+          ptsxE <<  ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
           
-          Eigen::VectorXd ptsyE(5);
-          ptsyE << ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
+          Eigen::VectorXd ptsyE(6);
+          ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
 
-          double v = j[1]["speed"];
+          
 
           /*
           * TODO: Calculate steering angle and throttle using MPC.
@@ -130,26 +137,26 @@ int main() {
           *
           */
           auto coeffs = polyfit(ptsxE, ptsyE, 3);
-          double latency = 0.1; //100ms
+          
           //from https://discussions.udacity.com/t/how-to-incorporate-latency-into-the-model/257391/4
-          px = v * latency;
-          py = 0;
-          psi = -v * delta * latency / Lf;
-          double epsi = -atan(coeffs[1]) + psi;
-          double cte = polyeval(coeffs, 0) + v * sin(epsi) * latency;
-          v += a * latency;
+          //px = v * latency;
+          //py = 0;
+          //psi = -v * delta * latency / Lf;
+          //double epsi = -atan(coeffs[1]) + psi;
+          //double cte = polyeval(coeffs, 0) + v * sin(epsi) * latency;
+          //v += a * latency;
           
           //auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
-          //double cte = polyeval(coeffs, 0);
+          double cte = polyeval(coeffs, 0);
           //std::cout <<"CTE: " <<cte << std::endl;
           //double epsi = atan(coeffs[1]);
-          //double epsi = -atan(coeffs[1]);
+          double epsi = -atan(coeffs[1]);
           //std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
-          //state << 1, 0, 0, v, cte, epsi;
+          state << 0, 0, 0, v, cte, epsi;
           //based on discussion forum
-          state << px, py, psi, v, cte, epsi; //car coordinates but predicted 100ms ahead
+          //state << px, py, psi, v, cte, epsi; //car coordinates but predicted 100ms ahead
 
 
           double steer_value;
