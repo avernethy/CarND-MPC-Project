@@ -70,6 +70,7 @@ int main() {
 
   // MPC is initialized here!
   MPC mpc;
+  const double Lf = 2.67;
 
   h.onMessage([&mpc](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
@@ -95,6 +96,8 @@ int main() {
           double px  = j[1]["x"];
           double py  = j[1]["y"];
           double psi = j[1]["psi"];
+          double delta  = j[1]["steering_angle"] / deg2rad(25);
+          double a = j[1]["throttle"];
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
@@ -129,9 +132,9 @@ int main() {
           px = v * latency;
           py = 0;
           psi = -v * delta * latency/Lf;
-          epsi = -atan(coeffs[1]) + psi;
-          cte = polyeval(coeffs, 0) + v * sin(espi) * latency;
-          v += a*latency;
+          double epsi = -atan(coeffs[1]) + psi;
+          double cte = polyeval(coeffs, 0) + v * sin(espi) * latency;
+          v += a * latency;
           
           //auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
           //double cte = polyeval(coeffs, 0);
@@ -144,7 +147,7 @@ int main() {
           //state << 1, 0, 0, v, cte, epsi;
           //based on discussion forum
           state << px, py, psi, cte, epsi //car coordinates but predicted 100ms ahead
-          
+
 
           double steer_value;
           double throttle_value;
