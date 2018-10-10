@@ -93,6 +93,8 @@ int main() {
           
           vector<double> ptsx_local(6);
           vector<double> ptsy_local(6);
+          vector<double> ptsx_local_lat(6);
+          vector<double> ptsy_local_lat(6);
           
           double px  = j[1]["x"];
           double py  = j[1]["y"];
@@ -104,10 +106,10 @@ int main() {
           double v = j[1]["speed"];
           //try adding latency to global coordinates
           double latency = 0.1; //100ms
-          px_lat = px + v * cos(psi) * latency;
-          py_lat = py + v * sin(psi) * latency;
-          psi_lat = psi * v * delta / Lf * latency;
-          v_lat = v + a * latency;
+          double px_lat = px + v * cos(psi) * latency;
+          double py_lat = py + v * sin(psi) * latency;
+          double psi_lat = psi * v * delta / Lf * latency;
+          double v_lat = v + a * latency;
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
