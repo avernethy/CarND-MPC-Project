@@ -108,8 +108,8 @@ int main() {
           double latency = 0.1; //100ms
           double px_lat = px + v * cos(psi) * latency;
           double py_lat = py + v * sin(psi) * latency;
-          double psi_lat = psi * v * delta / Lf * latency;
-          double v_lat = v + a * latency;
+          //double psi_lat = psi * v * delta / Lf * latency;
+          //double v_lat = v + a * latency;
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
