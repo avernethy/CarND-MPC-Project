@@ -6,8 +6,8 @@
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 20;
-double dt = 0.03;
+size_t N = 30;
+double dt = 0.02;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -57,7 +57,7 @@ class FG_eval {
     //From solution
     // The part of the cost based on the reference state.
     for (unsigned int t =0; t < N; t++) {
-      fg[0] += 0.2 * CppAD::pow(vars[cte_start + t], 2);
+      fg[0] += 0.5   * CppAD::pow(vars[cte_start  + t], 2);
       fg[0] += 0.001 * CppAD::pow(vars[epsi_start + t], 2);
       fg[0] += CppAD::pow((vars[v_start + t] - ref_v), 2);
     }
