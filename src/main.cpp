@@ -210,7 +210,7 @@ int main() {
           msgJson["next_y"] = next_y_vals;
 
           //auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          auto msg = "42[\"steer\]";
+          auto msg = "42[\"manual\",{}]";
           //std::cout << msg << std::endl;
           // Latency
           // The purpose is to mimic real driving conditions where
