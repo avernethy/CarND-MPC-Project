@@ -57,14 +57,14 @@ class FG_eval {
     //From solution
     // The part of the cost based on the reference state.
     for (unsigned int t =0; t < N; t++) {
-      fg[0] += 0.2 * CppAD::pow(vars[cte_start + t], 2);
+      fg[0] += 0.1 * CppAD::pow(vars[cte_start + t], 2);
       fg[0] += 0.001 * CppAD::pow(vars[epsi_start + t], 2);
       fg[0] += CppAD::pow((vars[v_start + t] - ref_v), 2);
     }
 
     //Minimize the use of actuators.
     for (unsigned int t = 0; t < N - 1; t++){
-      fg[0] += 200*CppAD::pow(vars[delta_start + t], 2);
+      fg[0] += 100*CppAD::pow(vars[delta_start + t], 2);
       fg[0] += 10*CppAD::pow(vars[a_start + t], 2);
     }
 
@@ -133,7 +133,7 @@ MPC::~MPC() {}
 
 vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //bool ok = true;
-  size_t i;
+  //size_t i;
   typedef CPPAD_TESTVECTOR(double) Dvector;
 
   double x = state[0];
@@ -169,7 +169,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
   Dvector vars(n_vars);
-  for (int i = 0; i < n_vars; i++) {
+  for (unsigned int i = 0; i < n_vars; i++) {
     vars[i] = 0.0;
   }
   
@@ -186,16 +186,16 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   Dvector vars_upperbound(n_vars);
   // TODO: Set lower and upper limits for variables.
   //from quiz
-  for (int i = 0; i < delta_start; i++) {
+  for (unsigned int i = 0; i < delta_start; i++) {
     vars_lowerbound[i] = -1.0e19;
     vars_upperbound[i] =  1.0e19;
   }
 
-  for (int i = delta_start; i < a_start; i++){
+  for (unsigned int i = delta_start; i < a_start; i++){
     vars_lowerbound[i] = -0.436332;
     vars_upperbound[i] =  0.436332;
   }
-  for (int i = a_start; i < n_vars; i++){
+  for (unsigned int i = a_start; i < n_vars; i++){
     vars_lowerbound[i] = -1.0;
     vars_upperbound[i] =  1.0;
   }
@@ -204,7 +204,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // Should be 0 besides initial state.
   Dvector constraints_lowerbound(n_constraints);
   Dvector constraints_upperbound(n_constraints);
-  for (int i = 0; i < n_constraints; i++) {
+  for (unsigned int i = 0; i < n_constraints; i++) {
     constraints_lowerbound[i] = 0;
     constraints_upperbound[i] = 0;
   }
@@ -259,7 +259,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 
   // Cost
   auto cost = solution.obj_value;
-  //std::cout << "Cost " << cost << std::endl;
+  std::cout << "Cost " << cost << std::endl;
 
   // TODO: Return the first actuator values. The variables can be accessed with
   // `solution.x[i]`.
