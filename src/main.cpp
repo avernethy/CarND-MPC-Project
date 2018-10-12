@@ -105,7 +105,7 @@ int main() {
           const double Lf = 2.67;
           double v = j[1]["speed"];
           //try adding latency to global coordinates
-          double latency = 0.1; //100ms
+          double latency = 0.2; //100ms
           double px_lat = px + v * cos(psi) * latency;
           double py_lat = py + v * sin(psi) * latency;
           //double psi_lat = psi * v * delta / Lf * latency;
