@@ -22,7 +22,7 @@ double dt = 0.018;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 //highest achieved speed is 50mph so far...
-double ref_v = 100.0; 
+double ref_v = 60.0; 
 
 //From quiz
 size_t x_start = 0;
