@@ -7,6 +7,7 @@ using CppAD::AD;
 
 // TODO: Set the timestep length and duration
 size_t N = 25;
+//dt is sensitive to speed
 double dt = 0.018;
 
 // This value assumes the model presented in the classroom is used.
@@ -20,8 +21,8 @@ double dt = 0.018;
 //
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
-//From quiz
-double ref_v = 50.0; 
+//highest achieved speed is 50mph so far...
+double ref_v = 100.0; 
 
 //From quiz
 size_t x_start = 0;
@@ -57,20 +58,26 @@ class FG_eval {
     //From solution
     // The part of the cost based on the reference state.
     for (unsigned int t =0; t < N; t++) {
+      // tune cross track error gain: very sensitive at 0.001 increments
       fg[0] += 0.01  * CppAD::pow(vars[cte_start  + t], 2);
+      // tune epsi gain: range is from 1 to 4 in 1 increments
       fg[0] += 4.0 * CppAD::pow(vars[epsi_start + t], 2);
       fg[0] += CppAD::pow((vars[v_start + t] - ref_v), 2);
     }
 
     //Minimize the use of actuators.
     for (unsigned int t = 0; t < N - 1; t++){
+      // this term helps to ensure actuation attains proper level
       fg[0] += 10*CppAD::pow(vars[delta_start + t], 2);
+      // set this term so that the brakes don't turn on sporadically
       fg[0] += 2*CppAD::pow(vars[a_start + t], 2);
     }
 
     //Minimize the value gap between sequential actuations.
     for (unsigned int t = 0; t < N - 2; t++){
+      // using this term as the damping for the turning command.  as cte and epsi compensation is tighter, turn this up
       fg[0] += 10000*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+      // help dampen the speed control
       fg[0] += 10*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
 
@@ -269,6 +276,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 
   // from quiz
   //std::cout << "a_start:  " << solution.x[a_start+1] << std::endl;
+  //pick few points to display the green line
   return {solution.x[x_start + 1], //0
           solution.x[x_start + 6],//1
           solution.x[x_start + 11],

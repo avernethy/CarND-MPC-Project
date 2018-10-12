@@ -90,9 +90,11 @@ int main() {
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
           
-          
+          //set up bins for x, and y in car coordinates
           vector<double> ptsx_local(6);
           vector<double> ptsy_local(6);
+
+          //set up bins for latency projected x and y coordinates
           vector<double> ptsx_local_lat(6);
           vector<double> ptsy_local_lat(6);
           
@@ -101,58 +103,46 @@ int main() {
           double psi = j[1]["psi"];
           double delta  = j[1]["steering_angle"];
           delta = delta / deg2rad(25);
-          //double a = j[1]["throttle"];
-          //const double Lf = 2.67;
+          
           double v = j[1]["speed"];
-          //try adding latency to global coordinates
-          double latency = 0.250; //100ms
-          //double psi_lat = psi * v * delta / Lf * latency;
+          //try adding latency to global coordinates instead of the local coordinates
+          double latency = 0.250; //100ms is what is in the simulator but was easier to tune at higher speed with 250ms of latency compensation
+          
+          //calcualte the projected x and y assuming the same angle as before. tried to used commanded steer to predict new angle but too unstable
           double px_lat = px + v * cos(psi) * latency;
           double py_lat = py + v * sin(psi) * latency;
           
-          //double v_lat = v + a * latency;
-
+          //use this section to draw the yellow lines
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
             ptsx_local[i] = (ptsx[i] - px) * cos(psi) + (ptsy[i] - py) * sin(psi);
             ptsy_local[i] = (ptsy[i] - py) * cos(psi) - (ptsx[i] - px) * sin(psi);
           }
 
+          //convert latency coordinates to local car coordinates
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
             //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
             ptsx_local_lat[i] = (ptsx[i] - px_lat) * cos(psi) + (ptsy[i] - py_lat) * sin(psi);
             ptsy_local_lat[i] = (ptsy[i] - py_lat) * cos(psi) - (ptsx[i] - px_lat) * sin(psi);
           }
           
+          //create the vectors for the polynomial fit.  Use the local latency predicted values
           Eigen::VectorXd ptsxE(6);
           ptsxE << ptsx_local_lat[0], ptsx_local_lat[1], ptsx_local_lat[2], ptsx_local_lat[3], ptsx_local_lat[4], ptsx_local_lat[5];
 
           Eigen::VectorXd ptsyE(6);
           ptsyE << ptsy_local_lat[0], ptsy_local_lat[1], ptsy_local_lat[2], ptsy_local_lat[3], ptsy_local_lat[4], ptsy_local_lat[5];
           
-          /*
-          * TODO: Calculate steering angle and throttle using MPC.
-          *
-          * Both are in between [-1, 1].
-          *
-          */
+          // do the fit here. 3rd degree polynomial
           auto coeffs = polyfit(ptsxE, ptsyE, 3);
-          
-          //from https://discussions.udacity.com/t/how-to-incorporate-latency-into-the-model/257391/4
-          //px = v * latency;
-          //py = 0;
-          //psi = -v * delta * latency / Lf;
-          //double epsi = -atan(coeffs[1]) + psi;
-          //double cte = polyeval(coeffs, 0) + v * sin(epsi) * latency;
-          //v += a * latency;
           
           double cte = polyeval(coeffs, 0);
           //std::cout <<"CTE: " <<cte << std::endl;
           double epsi = -atan(coeffs[1]);
 
+          //assign 0s for the first elements.  x, y and psi are are the local coordiante system here so they should all be zero
           Eigen::VectorXd state(6);
           state << 0, 0, 0, v, cte, epsi;
-          //based on discussion forum
 
           double steer_value;
           double throttle_value;
