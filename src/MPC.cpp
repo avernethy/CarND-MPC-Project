@@ -8,7 +8,7 @@ using CppAD::AD;
 // TODO: Set the timestep length and duration
 size_t N = 25;
 //dt is sensitive to speed
-double dt = 0.009;
+double dt = 0.018;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -22,7 +22,7 @@ double dt = 0.009;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 //highest achieved speed is 50mph so far...
-double ref_v = 100.0; 
+double ref_v = 50.0; 
 
 //From quiz
 size_t x_start = 0;
