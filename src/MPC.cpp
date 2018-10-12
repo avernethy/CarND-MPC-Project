@@ -68,7 +68,7 @@ class FG_eval {
     //Minimize the use of actuators.
     for (unsigned int t = 0; t < N - 1; t++){
       // this term helps to ensure actuation attains proper level
-      fg[0] += 10*CppAD::pow(vars[delta_start + t], 2);
+      fg[0] += 1*CppAD::pow(vars[delta_start + t], 2);
       // set this term so that the brakes don't turn on sporadically
       fg[0] += 2*CppAD::pow(vars[a_start + t], 2);
     }
