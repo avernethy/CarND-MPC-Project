@@ -102,7 +102,7 @@ int main() {
           double delta  = j[1]["steering_angle"];
           delta = delta / deg2rad(25);
           //double a = j[1]["throttle"];
-          //const double Lf = 2.67;
+          const double Lf = 2.67;
           double v = j[1]["speed"];
           //try adding latency to global coordinates
           double latency = 0.1; //100ms
