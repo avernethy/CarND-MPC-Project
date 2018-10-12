@@ -57,8 +57,8 @@ class FG_eval {
     //From solution
     // The part of the cost based on the reference state.
     for (unsigned int t =0; t < N; t++) {
-      fg[0] += 0.011   * CppAD::pow(vars[cte_start  + t], 2);
-      fg[0] += 4 * CppAD::pow(vars[epsi_start + t], 2);
+      fg[0] += 0.010   * CppAD::pow(vars[cte_start  + t], 2);
+      fg[0] += 7 * CppAD::pow(vars[epsi_start + t], 2);
       fg[0] += CppAD::pow((vars[v_start + t] - ref_v), 2);
     }
 
