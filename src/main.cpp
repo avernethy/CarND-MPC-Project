@@ -106,9 +106,10 @@ int main() {
           double v = j[1]["speed"];
           //try adding latency to global coordinates
           double latency = 0.1; //100ms
-          double px_lat = px + v * cos(psi) * latency;
-          double py_lat = py + v * sin(psi) * latency;
-          //double psi_lat = psi * v * delta / Lf * latency;
+          double psi_lat = psi * v * delta / Lf * latency;
+          double px_lat = px + v * cos(psi_lat) * latency;
+          double py_lat = py + v * sin(psi_lat) * latency;
+          
           //double v_lat = v + a * latency;
 
           for(unsigned int i = 0; i < ptsx.size() ; ++i){
