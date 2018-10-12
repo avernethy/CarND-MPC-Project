@@ -105,7 +105,7 @@ int main() {
           const double Lf = 2.67;
           double v = j[1]["speed"];
           //try adding latency to global coordinates
-          double latency = 0.2; //100ms
+          double latency = 0.1; //100ms
           double px_lat = px + v * cos(psi) * latency;
           double py_lat = py + v * sin(psi) * latency;
           //double psi_lat = psi * v * delta / Lf * latency;
@@ -122,20 +122,11 @@ int main() {
             ptsx_local_lat[i] = (ptsx[i] - px_lat) * cos(psi) + (ptsy[i] - py_lat) * sin(psi);
             ptsy_local_lat[i] = (ptsy[i] - py_lat) * cos(psi) - (ptsx[i] - px_lat) * sin(psi);
           }
-                    
-          
-          Eigen::VectorXd ptsxE_g(6);
-          ptsxE_g << ptsx[0], ptsx[1], ptsx[2], ptsx[3], ptsx[4], ptsx[5];
-          
-          Eigen::VectorXd ptsyE_g(6);
-          ptsyE_g << ptsy[0], ptsy[1], ptsy[2], ptsy[3], ptsy[4], ptsy[5];
           
           Eigen::VectorXd ptsxE(6);
-          //ptsxE <<  ptsx_local[0], ptsx_local[1], ptsx_local[2], ptsx_local[3], ptsx_local[4], ptsx_local[5];
           ptsxE << ptsx_local_lat[0], ptsx_local_lat[1], ptsx_local_lat[2], ptsx_local_lat[3], ptsx_local_lat[4], ptsx_local_lat[5];
 
           Eigen::VectorXd ptsyE(6);
-          //ptsyE << ptsy_local[0], ptsy_local[1], ptsy_local[2], ptsy_local[3], ptsy_local[4], ptsy_local[5];
           ptsyE << ptsy_local_lat[0], ptsy_local_lat[1], ptsy_local_lat[2], ptsy_local_lat[3], ptsy_local_lat[4], ptsy_local_lat[5];
           
           /*
@@ -154,25 +145,18 @@ int main() {
           //double cte = polyeval(coeffs, 0) + v * sin(epsi) * latency;
           //v += a * latency;
           
-          //auto coeffs_g = polyfit(ptsxE_g, ptsyE_g, 3);
           double cte = polyeval(coeffs, 0);
           //std::cout <<"CTE: " <<cte << std::endl;
-          //double epsi = atan(coeffs[1]);
           double epsi = -atan(coeffs[1]);
-          //std::cout <<"epsi: " <<epsi * 180.0 / 3.14 << "Deg" << std::endl;
 
           Eigen::VectorXd state(6);
           state << 0, 0, 0, v, cte, epsi;
           //based on discussion forum
-          //state << px, py, psi, v, cte, epsi; //car coordinates but predicted 100ms ahead
-
 
           double steer_value;
           double throttle_value;
           vector<double> outputs = mpc.Solve(state, coeffs);
           steer_value = -outputs[14]/deg2rad(25);  //minus is to the left
-          //std::cout <<"Throttle: " <<outputs[15] << std::endl;
-          //std::cout <<"Steer: " <<steer_value << std::endl;
           throttle_value = outputs[15];
 
           json msgJson;
