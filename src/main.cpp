@@ -70,6 +70,7 @@ int main() {
 
   // MPC is initialized here!
   MPC mpc;
+  
 
   h.onMessage([&mpc](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
@@ -78,6 +79,7 @@ int main() {
     // The 2 signifies a websocket event
     string sdata = string(data).substr(0, length);
     cout << sdata << endl;
+    
     if (sdata.size() > 2 && sdata[0] == '4' && sdata[1] == '2') {
       string s = hasData(sdata);
       if (s != "") {
@@ -87,19 +89,66 @@ int main() {
           // j[1] is the data JSON object
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
-          double px = j[1]["x"];
-          double py = j[1]["y"];
-          double psi = j[1]["psi"];
-          double v = j[1]["speed"];
+          
+          //set up bins for x, and y in car coordinates
+          vector<double> ptsx_local(6);
+          vector<double> ptsy_local(6);
 
-          /*
-          * TODO: Calculate steering angle and throttle using MPC.
-          *
-          * Both are in between [-1, 1].
-          *
-          */
+          //set up bins for latency projected x and y coordinates
+          vector<double> ptsx_local_lat(6);
+          vector<double> ptsy_local_lat(6);
+          
+          double px  = j[1]["x"];
+          double py  = j[1]["y"];
+          double psi = j[1]["psi"];
+          double delta  = j[1]["steering_angle"];
+          delta = delta / deg2rad(25);
+          
+          double v = j[1]["speed"];
+          //try adding latency to global coordinates instead of the local coordinates
+          double latency = 0.250; //100ms is what is in the simulator but was easier to tune at higher speed with 250ms of latency compensation
+          
+          //calcualte the projected x and y assuming the same angle as before. tried to used commanded steer to predict new angle but too unstable
+          double px_lat = px + v * cos(psi) * latency;
+          double py_lat = py + v * sin(psi) * latency;
+          
+          //use this section to draw the yellow lines
+          for(unsigned int i = 0; i < ptsx.size() ; ++i){
+            //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
+            ptsx_local[i] = (ptsx[i] - px) * cos(psi) + (ptsy[i] - py) * sin(psi);
+            ptsy_local[i] = (ptsy[i] - py) * cos(psi) - (ptsx[i] - px) * sin(psi);
+          }
+
+          //convert latency coordinates to local car coordinates
+          for(unsigned int i = 0; i < ptsx.size() ; ++i){
+            //https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/4
+            ptsx_local_lat[i] = (ptsx[i] - px_lat) * cos(psi) + (ptsy[i] - py_lat) * sin(psi);
+            ptsy_local_lat[i] = (ptsy[i] - py_lat) * cos(psi) - (ptsx[i] - px_lat) * sin(psi);
+          }
+          
+          //create the vectors for the polynomial fit.  Use the local latency predicted values
+          Eigen::VectorXd ptsxE(6);
+          ptsxE << ptsx_local_lat[0], ptsx_local_lat[1], ptsx_local_lat[2], ptsx_local_lat[3], ptsx_local_lat[4], ptsx_local_lat[5];
+
+          Eigen::VectorXd ptsyE(6);
+          ptsyE << ptsy_local_lat[0], ptsy_local_lat[1], ptsy_local_lat[2], ptsy_local_lat[3], ptsy_local_lat[4], ptsy_local_lat[5];
+          
+          // do the fit here. 3rd degree polynomial
+          auto coeffs = polyfit(ptsxE, ptsyE, 3);
+          
+          double cte = polyeval(coeffs, 0);
+          //std::cout <<"CTE: " <<cte << std::endl;
+          double epsi = -atan(coeffs[1]);
+
+          //assign 0s for the first elements.  x, y and psi are are the local coordiante system here so they should all be zero
+          Eigen::VectorXd state(6);
+          state << 0, 0, 0, v, cte, epsi;
+
           double steer_value;
           double throttle_value;
+          vector<double> outputs = mpc.Solve(state, coeffs);
+          steer_value = -outputs[14]/deg2rad(25);  //minus is to the left
+          throttle_value = outputs[15];
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
@@ -111,6 +160,12 @@ int main() {
           vector<double> mpc_x_vals;
           vector<double> mpc_y_vals;
 
+          for (int i = 0; i < 5; ++i){
+            mpc_x_vals.push_back(outputs[i]);
+            //std::cout <<"mpc x val: " <<outputs[i] << std::endl;
+            mpc_y_vals.push_back(outputs[i+5]);
+          }
+          
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
 
@@ -120,16 +175,18 @@ int main() {
           //Display the waypoints/reference line
           vector<double> next_x_vals;
           vector<double> next_y_vals;
-
+          
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
+          next_x_vals = ptsx_local;
+          next_y_vals = ptsy_local;
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
 
-
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          std::cout << msg << std::endl;
+           
+          //std::cout << msg << std::endl;
           // Latency
           // The purpose is to mimic real driving conditions where
           // the car does actuate the commands instantly.
